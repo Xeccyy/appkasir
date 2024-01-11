@@ -29,10 +29,11 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    
+
                     <table id="example1" class="table table-hover">
                         <thead class="bg-blue">
                             <th>ProdukID</th>
+                            <th>Barcode</th>
                             <th>Nama Produk</th>
                             <th> Harga</th>
                             <th>Stok</th>
@@ -45,8 +46,9 @@
                         ?>
                             <tr>
                                 <td><?= $kolom['ProdukID']; ?></td>
+                                <td><?= $kolom['Barcode']; ?></td>
                                 <td><?= $kolom['NamaProduk']; ?></td>
-                                <td><?= $kolom['Harga']; ?></td>
+                                <td><?= number_format($kolom['Harga']); ?></td>
                                 <td><?= $kolom['Stok']; ?></td>
                                 <td>
                                     <!-- tombol edit-->
@@ -74,12 +76,16 @@
                                                 <input type="hidden" name="ProdukID" value="<?=
                                                                                             $kolom['ProdukID']; ?>">
 
+                                                <label for="Barcode">Barcode</label>
+                                                <input type="text" name="Barcode" value="<?=
+                                                                                            $kolom['Barcode']; ?>" class="form-control" required>
+
+
                                                 <label for="NamaProduk">Nama Produk</label>
                                                 <input type="text" name="NamaProduk" value="<?=
-                                                                                        $kolom['NamaProduk']; ?>" class="form-control" required>
-
+                                                                                            $kolom['NamaProduk']; ?>" class="form-control" required>
                                                 <label for="Harga">Harga </label>
-                                                <input type="number" name="Harga" value="<?= $kolom['Harga']; ?>" class="form-control" required>
+                                                <input type="number" name="Harga" value="<?= number_format($kolom['Harga']); ?>" class="form-control" required>
 
                                                 <label for="Stok">Stok</label>
                                                 <input type="number" name="Stok" value="<?= $kolom['Stok']; ?>" class="form-control" required>
@@ -120,6 +126,10 @@
             <div class="modal-body">
                 <form action="aksi/produk.php" method="post">
                     <input type="hidden" name="aksi" value="tambah">
+
+                    <label for="Barcode">Barcode</label>
+                    <input type="text" name="Barcode" class="form-control" required>
+
                     <label for="NamaProduk">Nama Produk</label>
                     <input type="text" name="NamaProduk" class="form-control" required>
 
@@ -129,7 +139,7 @@
                     <label for="Stok">Stok </label>
                     <input type="number" name="Stok" class="form-control" required>
 
-                    
+
                     <br>
                     <button type="sumbit" class="btn btn-block bg-blue"><i class="fas fa-save"></i></button>
 
@@ -141,5 +151,3 @@
         </div>
     </div>
 </div>
-
-

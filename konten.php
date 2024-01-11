@@ -15,6 +15,10 @@ else if($_GET['p']=='pelanggan'){
     $title='Data Pelanggan ';
     $konten="konten/pelanggan.php";
 }
+else if($_GET['p']=='tambah'){
+    $title='Tambah Penjualan Baru ';
+    $konten="konten/tambah.php";
+}
 else if($_GET['p']=='laporan'){
     $title='Laporan sistem ';
     $konten="konten/laporan.php";

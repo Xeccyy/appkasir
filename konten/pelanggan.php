@@ -124,7 +124,7 @@
                     <input type="text" name="NamaPelanggan" class="form-control" required>
 
                     <label for="Alamat">Alamat </label>
-                    <input type="text-area" name="Alamat" class="form-control" required>
+                    <textarea name="Alamat" id="" cols="50" rows="3" class="form-control"></textarea>
 
                     <label for="NomorTelepon">No HP </label>
                     <input type="number" name="NomorTelepon" class="form-control" required>
