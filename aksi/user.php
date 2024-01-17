@@ -41,7 +41,7 @@ if ($_POST) {
             $user=mysqli_fetch_array($query);
             $_SESSION['user']=$user['username'];
             $_SESSION['nama']=$user['nama'];
-            $_SESSION['id']=$user['id'];
+            $_SESSION['id']=$user['id_user'];
             $_SESSION['akses']=$user['hak_akses'];
             if($user['hak_akses']==1){
                 $_SESSION['menu']="Administrator";
