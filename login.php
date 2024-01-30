@@ -27,7 +27,7 @@
                         <b>Aplikasi Kasir</a>
                 </div>
                 <div class="card-body">
-                            <p class="login-box-msg">Silahkan Login Untuk Masuk Ke Siswa</p>
+                            <p class="login-box-msg">Silahkan Login</p>
                             <form action="aksi/user.php" method="post">
                                 <input type="hidden" name="aksi" value="login">
                                 <div class="input-group mb-3">

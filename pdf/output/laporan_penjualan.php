@@ -38,16 +38,16 @@ $pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 // set document information
 $pdf->setCreator(PDF_CREATOR);
 $pdf->setAuthor('Dewa Abimayu');
-$pdf->setTitle('Laporan Pembayaran Siswa');
-$pdf->setSubject('Pembayaran Siswa');
-$pdf->setKeywords('SIP,Pembayaran Siswa');
+$pdf->setTitle('Laporan Penjualan');
+$pdf->setSubject('Penjualan');
+$pdf->setKeywords('APP Kasir, Penjualan');
 
 // set default header data
-$pdf->setHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, 'SIP 1.0', PDF_HEADER_STRING);
+$pdf->setHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH,'APP Kasir', PDF_HEADER_STRING);
 
 // set header and footer fonts
-$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
 $pdf->setDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -64,9 +64,9 @@ $pdf->setAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
-    require_once(dirname(__FILE__) . '/lang/eng.php');
-    $pdf->setLanguageArray($l);
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
 }
 
 // ---------------------------------------------------------
@@ -76,61 +76,56 @@ $pdf->setFont('dejavusans', '', 10);
 
 // add a page
 $pdf->AddPage();
- 
+
 // writeHTML($html, $ln=true, $fill=false, $reseth=false, $cell=false, $align='')
 // writeHTMLCell($w, $h, $x, $y, $html='', $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true)
 
-$tanggal_awal = $_GET['tanggal_awal'];
-$tanggal_akhir = $_GET['tanggal_akhir'];
-$id_siswa = $_GET['id_siswa'];
+$tanggal_awal=$_GET['tanggal_awal'];
+$tanggal_akhir=$_GET['tanggal_akhir'];
 
 // create some HTML content
 $html = '
-    <p align="center"><strong><strong>Laporan Pembayaran Siswa</strong></b></p><br>
-    <b>Periode : '.date('d-F-Y',strtotime($tanggal_awal)). ' S/D '. date('d-F-Y',strtotime($tanggal_akhir)).'
-    </b><br><br>
-    <table style="width:100%; border-collapse:collapse;border: 1px solid black;" border="1">
-        <tr style="font-weight:bold; text-align:center;">
-            <td style="width:5%;">No</td>
-            <td style="width:5%;">NIS</td>
-            <td style="width:25%;">Nama</td>
-            <td style="width:10%;">Kelas</td>
-            <td style="width:15%;">Tanggal Pembayaran</td>
-            <td style="width:15%;">Status</td>
-            <td style="width:20%;">Nominal Pembayaran</td>
-        </tr>
+<p align="center"><strong><bold>Laporan Penjualan</strong></b></p><br>
+<b>Periode : '.date('d-F-Y',strtotime($tanggal_awal)). ' S/D '. date('d-F-Y',strtotime($tanggal_akhir)) .'</b>
+<br><br>
+<table style="width:100%; border-collapse:collapse; border: 1px solid black;" border="1">
+    <tr style="font-weight:bold; text-align:center;">
+        <td style="width:5%;">No</td>
+        <td style="width:20%;">Penjualan ID</td>
+        <td style="width:20%;">Tanggal Penjualan</td>
+        <td style="width:35%;">Nama Pelanggan</td>     
+        <td style="width:20%;">Total Belanja</td>     
+    </tr>
+
 ';
 
-$sql="SELECT bayar.*,siswa.nis,siswa.nama,siswa.kelas,bayar_metode.metode FROM bayar,siswa,bayar_metode WHERE bayar.dihapus_pada IS NULL AND bayar.id_siswa=siswa.id_siswa AND bayar.id_bayar_metode=bayar_metode.id_bayar_metode AND bayar.tanggal_bayar BETWEEN '$tanggal_awal' AND '$tanggal_akhir' AND bayar.id_siswa=$id_siswa ORDER BY bayar.tanggal_bayar ASC";
-$query = mysqli_query($koneksi, $sql);
+$sql="SELECT penjualan.*,pelanggan.NamaPelanggan FROM penjualan,pelanggan WHERE penjualan.PelangganID=pelanggan.PelangganID AND TanggalPenjualan BETWEEN '$tanggal_awal' AND '$tanggal_akhir' ORDER BY penjualan.TanggalPenjualan ASC";
+$query=mysqli_query($koneksi,$sql);
 $no=0;
 $total=0;
-while ($bayar = mysqli_fetch_array($query)) {
+while($data=mysqli_fetch_array($query)){
     $no++;
-    $total=$total+$bayar['nominal_bayar'];
-    $html .= '
+    $total=$total+$data['TotalHarga'];
+    $html.='
     <tr>
-    <td>'.$no.'</td>
-    <td>' . $bayar['nis'] . '</td>
-    <td>' . $bayar['nama'] . '</td>
-    <td>' . $bayar['kelas'] . '</td>
-    <td>' . $bayar['tanggal_bayar'] . '</td>
-    <td>' . $bayar['status_verifikasi'] . '</td>
-    <td align="right">' . number_format($bayar['nominal_bayar']) . '</td>
+        <td>'.$no.'</td>
+        <td>'.$data['PenjualanID'].'</td>
+        <td>'.$data['TanggalPenjualan'].'</td>
+        <td>'.$data['NamaPelanggan'].'</td>
+        <td align="right">'.number_format($data['TotalHarga']).'</td>
     </tr>
     ';
 }
 
-
-
-$html .= '
+$html.='
 <tr>
-  <td colspan="6" align="center"><b>Grandtotal</b></td>
-  <td align="right"><b>'.number_format($total).'</b></td>
+    <td colspan="4" align="center"><b>Grandtotal</b></td>
+    <td align="right"><b>'.number_format($total).'</b></td>
 </tr>
 </table>
 <br><br>
 -- Dicetak Pada : '.date('d-F-Y H:i:s').' --
+
 ';
 
 // output the HTML content
